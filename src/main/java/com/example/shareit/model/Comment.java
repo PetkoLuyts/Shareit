@@ -16,11 +16,11 @@ public class Comment {
     @NotEmpty(message = "Comment text cannot be empty or null")
     private String text;
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "id", referencedColumnName = "id")
+    @JoinColumn(name = "postId", referencedColumnName = "id")
     private Post post;
     private Instant createdDate;
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "id", referencedColumnName = "id")
+    @JoinColumn(name = "userId", referencedColumnName = "id")
     private User user;
 
     public Comment() {
