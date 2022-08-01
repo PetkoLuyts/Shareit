@@ -1,6 +1,7 @@
 package com.example.shareit.service;
 
 import com.example.shareit.dto.RegisterRequest;
+import com.example.shareit.model.NotificationEmail;
 import com.example.shareit.model.User;
 import com.example.shareit.model.VerificationToken;
 import com.example.shareit.repository.UserRepository;
@@ -17,11 +18,13 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final VerificationTokenRepository verificationTokenRepository;
+    private final MailService mailService;
 
-    public AuthService(PasswordEncoder passwordEncoder, UserRepository userRepository, VerificationTokenRepository verificationTokenRepository) {
+    public AuthService(PasswordEncoder passwordEncoder, UserRepository userRepository, VerificationTokenRepository verificationTokenRepository, MailService mailService) {
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
         this.verificationTokenRepository = verificationTokenRepository;
+        this.mailService = mailService;
     }
 
     @Transactional
@@ -35,6 +38,11 @@ public class AuthService {
         userRepository.save(user);
 
         String token = generateVerificationToken(user);
+
+        mailService.sendMail(new NotificationEmail("Please Activate your Account",
+                user.getEmail(), "Thank you for signing up to Shareit, " +
+                "please click on the below url to activate your account : " +
+                "http://localhost:8080/api/auth/accountVerification/" + token));
     }
 
     private String generateVerificationToken(User user) {
