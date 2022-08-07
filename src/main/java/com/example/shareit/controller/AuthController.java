@@ -1,5 +1,6 @@
 package com.example.shareit.controller;
 
+import com.example.shareit.dto.LoginRequest;
 import com.example.shareit.dto.RegisterRequest;
 import com.example.shareit.service.AuthService;
 import org.springframework.http.HttpStatus;
@@ -25,5 +26,10 @@ public class AuthController {
     public ResponseEntity<String> verifyAccount(@PathVariable String token) {
         authService.verifyAccount(token);
         return new ResponseEntity<>("Account Activated Successfully", HttpStatus.OK);
+    }
+
+    @PostMapping("/login")
+    public void login(@RequestBody LoginRequest loginRequest) {
+        authService.login(loginRequest);
     }
 }
